@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{ title }}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{
+  background-color: azure;
+}
+</style>
+</head>
+<body>
+  <h1 style="text-align: center;"><i>TO DO LIST APP</i></h1><hr><hr>
+<div class="container">
+  {% if messages %}
+    {% for message in messages %}
+      <div>{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+  <div class="form-section">
+    <h2 style="text-align: center;color: rgb(77, 20, 235);">Add Task</h2>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="submit-form">
+          <form method="POST" style="text-align: center;">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div style="text-align: center;">
+              <input type="submit" class="submit-btn" value="Submit" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr><hr>
+  <h2 style="text-align: center;color: rgb(244, 236, 9);">Active Tasks</h2>
+  <div class="row">
+    <div class="col-md-8" style="text-align: center;">
+      <p class="active-tasks" >
+        {% for todo in active_tasks %}<br><br>
+          {{ todo.task_name }} - Priority: {{ todo.priority }} - Due Date: {{ todo.due_date }}
+            <form action="{% url 'mark_as_completed' todo.id %}" method="POST" style="display: inline;">
+              {% csrf_token %}
+              <button type="submit" class="submit-btn" name="mark_as_completed">Mark as Completed</button>
+            </form>
+            <form action="{% url 'remove_todo' todo.id %}" method="POST" style="display: inline;">
+              {% csrf_token %}
+              <button type="submit" class="submit-btn" name="remove">Remove</button>
+            </form>
+         
+        {% endfor %}
+          </p>
+    </div>
+  </div>
+  <hr><hr>
+  <h2 style="text-align: center;color: rgb(0, 128, 0);">Completed Tasks</h2>
+  <div class="row">
+    <div class="col-md-8" style="text-align: center;">
+      <p class="completed-tasks" >
+        {% for todo in completed_tasks %}<br><br>
+          {{ todo.task_name }} - Priority: {{ todo.priority }} - Due Date: {{ todo.due_date }}</li>
+        {% endfor %}
+      </p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
